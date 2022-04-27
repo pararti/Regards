@@ -1,0 +1,47 @@
+syntax = "proto3";
+package dbapis;
+
+
+message Id{
+	int32 id = 1;
+}
+
+message Name{
+	string Name = 1;
+}
+
+message Login{
+	string Login = 1;
+}
+
+message User{
+	Id id = 1;
+	Name name = 2;
+	Login login = 3;
+	string password = 4; 
+	string email = 5;
+}
+
+message Session{
+	Id id = 1;
+	int32 meta = 2;
+	repeated User users = 3;
+}
+
+message Media{
+	Id id = 1;
+	uint64 lasting = 2;
+	string link = 3;
+	string type = 4;
+	Name name = 5;
+}
+
+service DBreq {
+	rpc GetUser(Login) returns (User);
+	rpc PutUser(Login) returns (Id);
+	rpc GetSession(Id) returns (Session);
+	rpc GetMedia(Name) returns (Media);
+	rpc PutMedia(Media) returns (Id);
+}
+	
+	
