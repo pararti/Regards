@@ -1,0 +1,56 @@
+syntax = "proto3";
+package dbapis;
+option go_package = ".";
+
+message UserID{
+	uint64 id = 1;
+}
+
+message Auth{
+	UserID id = 1;
+	string name = 2;
+	string login = 3;
+	string password = 4;
+	string cookie = 5;
+}
+
+message User{
+	UserID id = 1;
+	string name = 2;
+	string login = 3;
+	string cookie = 4;
+}
+
+message SessionID{
+	uint64 id = 1;
+}
+
+message Session{
+	SessionID id = 1;
+	string meta = 2;
+	repeated User users = 3;
+}
+
+
+message MediaID{
+	uint64 Name = 1;
+}
+
+message Media{
+	MediaID id = 1;
+	uint64 lasting = 2;
+	string link = 3;
+	string type = 4;
+	string name = 5;
+}
+
+service DBreq {
+	rpc GetUser(UserID) returns (User);
+	rpc SetUser(Auth) returns (UserID);
+	rpc GetSession(SessionID) returns (Session);
+	rpc SetSession(Session) returns (SessionID);
+	rpc GetMedia(MediaID) returns (Media);
+	rpc SetMedia(Media) returns (MediaID);
+}
+	
+	
