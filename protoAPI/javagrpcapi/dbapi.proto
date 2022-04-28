@@ -45,11 +45,11 @@ message Media{
 }
 
 service DBreq {
-	rpc GetUser(UserID) returns (User);
+	rpc GetUser(stream UserID) returns (stream User);
 	rpc SetUser(Auth) returns (UserID);
-	rpc GetSession(SessionID) returns (Session);
+	rpc GetSession(stream SessionID) returns (stream Session);
 	rpc SetSession(Session) returns (SessionID);
-	rpc GetMedia(MediaID) returns (Media);
+	rpc GetMedia(stream MediaID) returns (stream Media);
 	rpc SetMedia(Media) returns (MediaID);
 }
 	

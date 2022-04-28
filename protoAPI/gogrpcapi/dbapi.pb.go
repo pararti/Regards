@@ -4,7 +4,7 @@
 // 	protoc        v3.20.1
 // source: dbapi.proto
 
-package __
+package dbapis
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"

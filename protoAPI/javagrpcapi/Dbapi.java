@@ -6130,14 +6130,14 @@ public final class Dbapi {
       "\014.dbapis.User\"\027\n\007MediaID\022\014\n\004Name\030\001 \001(\004\"_" +
       "\n\005Media\022\033\n\002id\030\001 \001(\0132\017.dbapis.MediaID\022\017\n\007" +
       "lasting\030\002 \001(\004\022\014\n\004link\030\003 \001(\t\022\014\n\004type\030\004 \001(" +
-      "\t\022\014\n\004name\030\005 \001(\t2\225\002\n\005DBreq\022\'\n\007GetUser\022\016.d" +
-      "bapis.UserID\032\014.dbapis.User\022\'\n\007SetUser\022\014." +
-      "dbapis.Auth\032\016.dbapis.UserID\0220\n\nGetSessio" +
-      "n\022\021.dbapis.SessionID\032\017.dbapis.Session\0220\n" +
-      "\nSetSession\022\017.dbapis.Session\032\021.dbapis.Se" +
-      "ssionID\022*\n\010GetMedia\022\017.dbapis.MediaID\032\r.d" +
-      "bapis.Media\022*\n\010SetMedia\022\r.dbapis.Media\032\017" +
-      ".dbapis.MediaIDB\003\n\001.b\006proto3"
+      "\t\022\014\n\004name\030\005 \001(\t2\241\002\n\005DBreq\022+\n\007GetUser\022\016.d" +
+      "bapis.UserID\032\014.dbapis.User(\0010\001\022\'\n\007SetUse" +
+      "r\022\014.dbapis.Auth\032\016.dbapis.UserID\0224\n\nGetSe" +
+      "ssion\022\021.dbapis.SessionID\032\017.dbapis.Sessio" +
+      "n(\0010\001\0220\n\nSetSession\022\017.dbapis.Session\032\021.d" +
+      "bapis.SessionID\022.\n\010GetMedia\022\017.dbapis.Med" +
+      "iaID\032\r.dbapis.Media(\0010\001\022*\n\010SetMedia\022\r.db" +
+      "apis.Media\032\017.dbapis.MediaIDB\003\n\001.b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

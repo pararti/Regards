@@ -4,7 +4,7 @@
 // - protoc             v3.20.1
 // source: dbapi.proto
 
-package __
+package dbapis 
 
 import (
 	context "context"
