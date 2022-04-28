@@ -4,7 +4,7 @@
 // - protoc             v3.20.1
 // source: dbapi.proto
 
-package dbapis
+package __
 
 import (
 	context "context"
@@ -22,11 +22,11 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DBreqClient interface {
-	GetUser(ctx context.Context, in *UserID, opts ...grpc.CallOption) (*User, error)
+	GetUser(ctx context.Context, opts ...grpc.CallOption) (DBreq_GetUserClient, error)
 	SetUser(ctx context.Context, in *Auth, opts ...grpc.CallOption) (*UserID, error)
-	GetSession(ctx context.Context, in *SessionID, opts ...grpc.CallOption) (*Session, error)
+	GetSession(ctx context.Context, opts ...grpc.CallOption) (DBreq_GetSessionClient, error)
 	SetSession(ctx context.Context, in *Session, opts ...grpc.CallOption) (*SessionID, error)
-	GetMedia(ctx context.Context, in *MediaID, opts ...grpc.CallOption) (*Media, error)
+	GetMedia(ctx context.Context, opts ...grpc.CallOption) (DBreq_GetMediaClient, error)
 	SetMedia(ctx context.Context, in *Media, opts ...grpc.CallOption) (*MediaID, error)
 }
 
@@ -38,13 +38,35 @@ func NewDBreqClient(cc grpc.ClientConnInterface) DBreqClient {
 	return &dBreqClient{cc}
 }
 
-func (c *dBreqClient) GetUser(ctx context.Context, in *UserID, opts ...grpc.CallOption) (*User, error) {
-	out := new(User)
-	err := c.cc.Invoke(ctx, "/dbapis.DBreq/GetUser", in, out, opts...)
+func (c *dBreqClient) GetUser(ctx context.Context, opts ...grpc.CallOption) (DBreq_GetUserClient, error) {
+	stream, err := c.cc.NewStream(ctx, &DBreq_ServiceDesc.Streams[0], "/dbapis.DBreq/GetUser", opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &dBreqGetUserClient{stream}
+	return x, nil
+}
+
+type DBreq_GetUserClient interface {
+	Send(*UserID) error
+	Recv() (*User, error)
+	grpc.ClientStream
+}
+
+type dBreqGetUserClient struct {
+	grpc.ClientStream
+}
+
+func (x *dBreqGetUserClient) Send(m *UserID) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *dBreqGetUserClient) Recv() (*User, error) {
+	m := new(User)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *dBreqClient) SetUser(ctx context.Context, in *Auth, opts ...grpc.CallOption) (*UserID, error) {
@@ -56,13 +78,35 @@ func (c *dBreqClient) SetUser(ctx context.Context, in *Auth, opts ...grpc.CallOp
 	return out, nil
 }
 
-func (c *dBreqClient) GetSession(ctx context.Context, in *SessionID, opts ...grpc.CallOption) (*Session, error) {
-	out := new(Session)
-	err := c.cc.Invoke(ctx, "/dbapis.DBreq/GetSession", in, out, opts...)
+func (c *dBreqClient) GetSession(ctx context.Context, opts ...grpc.CallOption) (DBreq_GetSessionClient, error) {
+	stream, err := c.cc.NewStream(ctx, &DBreq_ServiceDesc.Streams[1], "/dbapis.DBreq/GetSession", opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &dBreqGetSessionClient{stream}
+	return x, nil
+}
+
+type DBreq_GetSessionClient interface {
+	Send(*SessionID) error
+	Recv() (*Session, error)
+	grpc.ClientStream
+}
+
+type dBreqGetSessionClient struct {
+	grpc.ClientStream
+}
+
+func (x *dBreqGetSessionClient) Send(m *SessionID) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *dBreqGetSessionClient) Recv() (*Session, error) {
+	m := new(Session)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *dBreqClient) SetSession(ctx context.Context, in *Session, opts ...grpc.CallOption) (*SessionID, error) {
@@ -74,13 +118,35 @@ func (c *dBreqClient) SetSession(ctx context.Context, in *Session, opts ...grpc.
 	return out, nil
 }
 
-func (c *dBreqClient) GetMedia(ctx context.Context, in *MediaID, opts ...grpc.CallOption) (*Media, error) {
-	out := new(Media)
-	err := c.cc.Invoke(ctx, "/dbapis.DBreq/GetMedia", in, out, opts...)
+func (c *dBreqClient) GetMedia(ctx context.Context, opts ...grpc.CallOption) (DBreq_GetMediaClient, error) {
+	stream, err := c.cc.NewStream(ctx, &DBreq_ServiceDesc.Streams[2], "/dbapis.DBreq/GetMedia", opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &dBreqGetMediaClient{stream}
+	return x, nil
+}
+
+type DBreq_GetMediaClient interface {
+	Send(*MediaID) error
+	Recv() (*Media, error)
+	grpc.ClientStream
+}
+
+type dBreqGetMediaClient struct {
+	grpc.ClientStream
+}
+
+func (x *dBreqGetMediaClient) Send(m *MediaID) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *dBreqGetMediaClient) Recv() (*Media, error) {
+	m := new(Media)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *dBreqClient) SetMedia(ctx context.Context, in *Media, opts ...grpc.CallOption) (*MediaID, error) {
@@ -96,11 +162,11 @@ func (c *dBreqClient) SetMedia(ctx context.Context, in *Media, opts ...grpc.Call
 // All implementations must embed UnimplementedDBreqServer
 // for forward compatibility
 type DBreqServer interface {
-	GetUser(context.Context, *UserID) (*User, error)
+	GetUser(DBreq_GetUserServer) error
 	SetUser(context.Context, *Auth) (*UserID, error)
-	GetSession(context.Context, *SessionID) (*Session, error)
+	GetSession(DBreq_GetSessionServer) error
 	SetSession(context.Context, *Session) (*SessionID, error)
-	GetMedia(context.Context, *MediaID) (*Media, error)
+	GetMedia(DBreq_GetMediaServer) error
 	SetMedia(context.Context, *Media) (*MediaID, error)
 	mustEmbedUnimplementedDBreqServer()
 }
@@ -109,20 +175,20 @@ type DBreqServer interface {
 type UnimplementedDBreqServer struct {
 }
 
-func (UnimplementedDBreqServer) GetUser(context.Context, *UserID) (*User, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
+func (UnimplementedDBreqServer) GetUser(DBreq_GetUserServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
 func (UnimplementedDBreqServer) SetUser(context.Context, *Auth) (*UserID, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetUser not implemented")
 }
-func (UnimplementedDBreqServer) GetSession(context.Context, *SessionID) (*Session, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetSession not implemented")
+func (UnimplementedDBreqServer) GetSession(DBreq_GetSessionServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetSession not implemented")
 }
 func (UnimplementedDBreqServer) SetSession(context.Context, *Session) (*SessionID, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetSession not implemented")
 }
-func (UnimplementedDBreqServer) GetMedia(context.Context, *MediaID) (*Media, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetMedia not implemented")
+func (UnimplementedDBreqServer) GetMedia(DBreq_GetMediaServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetMedia not implemented")
 }
 func (UnimplementedDBreqServer) SetMedia(context.Context, *Media) (*MediaID, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetMedia not implemented")
@@ -140,22 +206,30 @@ func RegisterDBreqServer(s grpc.ServiceRegistrar, srv DBreqServer) {
 	s.RegisterService(&DBreq_ServiceDesc, srv)
 }
 
-func _DBreq_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserID)
-	if err := dec(in); err != nil {
+func _DBreq_GetUser_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(DBreqServer).GetUser(&dBreqGetUserServer{stream})
+}
+
+type DBreq_GetUserServer interface {
+	Send(*User) error
+	Recv() (*UserID, error)
+	grpc.ServerStream
+}
+
+type dBreqGetUserServer struct {
+	grpc.ServerStream
+}
+
+func (x *dBreqGetUserServer) Send(m *User) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *dBreqGetUserServer) Recv() (*UserID, error) {
+	m := new(UserID)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(DBreqServer).GetUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/dbapis.DBreq/GetUser",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DBreqServer).GetUser(ctx, req.(*UserID))
-	}
-	return interceptor(ctx, in, info, handler)
+	return m, nil
 }
 
 func _DBreq_SetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -176,22 +250,30 @@ func _DBreq_SetUser_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DBreq_GetSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SessionID)
-	if err := dec(in); err != nil {
+func _DBreq_GetSession_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(DBreqServer).GetSession(&dBreqGetSessionServer{stream})
+}
+
+type DBreq_GetSessionServer interface {
+	Send(*Session) error
+	Recv() (*SessionID, error)
+	grpc.ServerStream
+}
+
+type dBreqGetSessionServer struct {
+	grpc.ServerStream
+}
+
+func (x *dBreqGetSessionServer) Send(m *Session) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *dBreqGetSessionServer) Recv() (*SessionID, error) {
+	m := new(SessionID)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(DBreqServer).GetSession(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/dbapis.DBreq/GetSession",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DBreqServer).GetSession(ctx, req.(*SessionID))
-	}
-	return interceptor(ctx, in, info, handler)
+	return m, nil
 }
 
 func _DBreq_SetSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -212,22 +294,30 @@ func _DBreq_SetSession_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DBreq_GetMedia_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MediaID)
-	if err := dec(in); err != nil {
+func _DBreq_GetMedia_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(DBreqServer).GetMedia(&dBreqGetMediaServer{stream})
+}
+
+type DBreq_GetMediaServer interface {
+	Send(*Media) error
+	Recv() (*MediaID, error)
+	grpc.ServerStream
+}
+
+type dBreqGetMediaServer struct {
+	grpc.ServerStream
+}
+
+func (x *dBreqGetMediaServer) Send(m *Media) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *dBreqGetMediaServer) Recv() (*MediaID, error) {
+	m := new(MediaID)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(DBreqServer).GetMedia(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/dbapis.DBreq/GetMedia",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DBreqServer).GetMedia(ctx, req.(*MediaID))
-	}
-	return interceptor(ctx, in, info, handler)
+	return m, nil
 }
 
 func _DBreq_SetMedia_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -256,30 +346,37 @@ var DBreq_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*DBreqServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetUser",
-			Handler:    _DBreq_GetUser_Handler,
-		},
-		{
 			MethodName: "SetUser",
 			Handler:    _DBreq_SetUser_Handler,
-		},
-		{
-			MethodName: "GetSession",
-			Handler:    _DBreq_GetSession_Handler,
 		},
 		{
 			MethodName: "SetSession",
 			Handler:    _DBreq_SetSession_Handler,
 		},
 		{
-			MethodName: "GetMedia",
-			Handler:    _DBreq_GetMedia_Handler,
-		},
-		{
 			MethodName: "SetMedia",
 			Handler:    _DBreq_SetMedia_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GetUser",
+			Handler:       _DBreq_GetUser_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "GetSession",
+			Handler:       _DBreq_GetSession_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "GetMedia",
+			Handler:       _DBreq_GetMedia_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "dbapi.proto",
 }
