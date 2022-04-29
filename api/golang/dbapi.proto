@@ -1,6 +1,6 @@
 syntax = "proto3";
 package dbapis;
-option go_package = ".";
+option go_package = "github.com/Regards/api/golang";
 
 message UserID{
 	uint64 id = 1;
