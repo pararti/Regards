@@ -1,0 +1,47 @@
+syntax = "proto3";
+package dbapis;
+option go_package = ".";
+
+message UserID{
+	uint64 id = 1;
+}
+
+
+message User{
+	UserID id = 1;
+	string name = 2;
+	string login = 3;
+	string cookie = 4;
+}
+
+message SessionID{
+	uint64 id = 1;
+}
+
+message Session{
+	SessionID id = 1;
+	string meta = 2;
+	repeated User users = 3;
+}
+
+
+message MediaID{
+	uint64 Name = 1;
+}
+
+message Media{
+	MediaID id = 1;
+	uint64 lasting = 2;
+	string link = 3;
+	string type = 4;
+	string name = 5;
+}
+
+service MediaAndSession {
+	rpc GetSession(stream SessionID) returns (stream Session);
+	rpc SetSession(stream Session) returns (stream SessionID);
+	rpc GetMedia(stream MediaID) returns (stream Media);
+	rpc SetMedia(stream Media) returns (stream MediaID);
+}
+	
+	
