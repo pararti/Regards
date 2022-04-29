@@ -38,10 +38,10 @@ message Media{
 }
 
 service MediaAndSession {
-	rpc GetSession(stream SessionID) returns (stream Session);
-	rpc SetSession(stream Session) returns (stream SessionID);
-	rpc GetMedia(stream MediaID) returns (stream Media);
-	rpc SetMedia(stream Media) returns (stream MediaID);
+	rpc GetSession(SessionID) returns (Session);
+	rpc SetSession(stream Session) returns (SessionID);
+	rpc GetMedia(MediaID) returns (Media);
+	rpc SetMedia(Media) returns (MediaID);
 }
 	
 	
