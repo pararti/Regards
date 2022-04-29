@@ -39,7 +39,7 @@ message Media{
 
 service MediaAndSession {
 	rpc GetSession(SessionID) returns (Session);
-	rpc SetSession(stream Session) returns (SessionID);
+	rpc SetSession(Session) returns (SessionID);
 	rpc GetMedia(MediaID) returns (Media);
 	rpc SetMedia(Media) returns (MediaID);
 }
