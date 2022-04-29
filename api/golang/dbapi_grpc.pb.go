@@ -22,10 +22,10 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MediaAndSessionClient interface {
-	GetSession(ctx context.Context, opts ...grpc.CallOption) (MediaAndSession_GetSessionClient, error)
-	SetSession(ctx context.Context, opts ...grpc.CallOption) (MediaAndSession_SetSessionClient, error)
-	GetMedia(ctx context.Context, opts ...grpc.CallOption) (MediaAndSession_GetMediaClient, error)
-	SetMedia(ctx context.Context, opts ...grpc.CallOption) (MediaAndSession_SetMediaClient, error)
+	GetSession(ctx context.Context, in *SessionID, opts ...grpc.CallOption) (*Session, error)
+	SetSession(ctx context.Context, in *Session, opts ...grpc.CallOption) (*SessionID, error)
+	GetMedia(ctx context.Context, in *MediaID, opts ...grpc.CallOption) (*Media, error)
+	SetMedia(ctx context.Context, in *Media, opts ...grpc.CallOption) (*MediaID, error)
 }
 
 type mediaAndSessionClient struct {
@@ -36,138 +36,50 @@ func NewMediaAndSessionClient(cc grpc.ClientConnInterface) MediaAndSessionClient
 	return &mediaAndSessionClient{cc}
 }
 
-func (c *mediaAndSessionClient) GetSession(ctx context.Context, opts ...grpc.CallOption) (MediaAndSession_GetSessionClient, error) {
-	stream, err := c.cc.NewStream(ctx, &MediaAndSession_ServiceDesc.Streams[0], "/dbapis.MediaAndSession/GetSession", opts...)
+func (c *mediaAndSessionClient) GetSession(ctx context.Context, in *SessionID, opts ...grpc.CallOption) (*Session, error) {
+	out := new(Session)
+	err := c.cc.Invoke(ctx, "/dbapis.MediaAndSession/GetSession", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &mediaAndSessionGetSessionClient{stream}
-	return x, nil
+	return out, nil
 }
 
-type MediaAndSession_GetSessionClient interface {
-	Send(*SessionID) error
-	Recv() (*Session, error)
-	grpc.ClientStream
-}
-
-type mediaAndSessionGetSessionClient struct {
-	grpc.ClientStream
-}
-
-func (x *mediaAndSessionGetSessionClient) Send(m *SessionID) error {
-	return x.ClientStream.SendMsg(m)
-}
-
-func (x *mediaAndSessionGetSessionClient) Recv() (*Session, error) {
-	m := new(Session)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func (c *mediaAndSessionClient) SetSession(ctx context.Context, opts ...grpc.CallOption) (MediaAndSession_SetSessionClient, error) {
-	stream, err := c.cc.NewStream(ctx, &MediaAndSession_ServiceDesc.Streams[1], "/dbapis.MediaAndSession/SetSession", opts...)
+func (c *mediaAndSessionClient) SetSession(ctx context.Context, in *Session, opts ...grpc.CallOption) (*SessionID, error) {
+	out := new(SessionID)
+	err := c.cc.Invoke(ctx, "/dbapis.MediaAndSession/SetSession", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &mediaAndSessionSetSessionClient{stream}
-	return x, nil
+	return out, nil
 }
 
-type MediaAndSession_SetSessionClient interface {
-	Send(*Session) error
-	Recv() (*SessionID, error)
-	grpc.ClientStream
-}
-
-type mediaAndSessionSetSessionClient struct {
-	grpc.ClientStream
-}
-
-func (x *mediaAndSessionSetSessionClient) Send(m *Session) error {
-	return x.ClientStream.SendMsg(m)
-}
-
-func (x *mediaAndSessionSetSessionClient) Recv() (*SessionID, error) {
-	m := new(SessionID)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func (c *mediaAndSessionClient) GetMedia(ctx context.Context, opts ...grpc.CallOption) (MediaAndSession_GetMediaClient, error) {
-	stream, err := c.cc.NewStream(ctx, &MediaAndSession_ServiceDesc.Streams[2], "/dbapis.MediaAndSession/GetMedia", opts...)
+func (c *mediaAndSessionClient) GetMedia(ctx context.Context, in *MediaID, opts ...grpc.CallOption) (*Media, error) {
+	out := new(Media)
+	err := c.cc.Invoke(ctx, "/dbapis.MediaAndSession/GetMedia", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &mediaAndSessionGetMediaClient{stream}
-	return x, nil
+	return out, nil
 }
 
-type MediaAndSession_GetMediaClient interface {
-	Send(*MediaID) error
-	Recv() (*Media, error)
-	grpc.ClientStream
-}
-
-type mediaAndSessionGetMediaClient struct {
-	grpc.ClientStream
-}
-
-func (x *mediaAndSessionGetMediaClient) Send(m *MediaID) error {
-	return x.ClientStream.SendMsg(m)
-}
-
-func (x *mediaAndSessionGetMediaClient) Recv() (*Media, error) {
-	m := new(Media)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func (c *mediaAndSessionClient) SetMedia(ctx context.Context, opts ...grpc.CallOption) (MediaAndSession_SetMediaClient, error) {
-	stream, err := c.cc.NewStream(ctx, &MediaAndSession_ServiceDesc.Streams[3], "/dbapis.MediaAndSession/SetMedia", opts...)
+func (c *mediaAndSessionClient) SetMedia(ctx context.Context, in *Media, opts ...grpc.CallOption) (*MediaID, error) {
+	out := new(MediaID)
+	err := c.cc.Invoke(ctx, "/dbapis.MediaAndSession/SetMedia", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &mediaAndSessionSetMediaClient{stream}
-	return x, nil
-}
-
-type MediaAndSession_SetMediaClient interface {
-	Send(*Media) error
-	Recv() (*MediaID, error)
-	grpc.ClientStream
-}
-
-type mediaAndSessionSetMediaClient struct {
-	grpc.ClientStream
-}
-
-func (x *mediaAndSessionSetMediaClient) Send(m *Media) error {
-	return x.ClientStream.SendMsg(m)
-}
-
-func (x *mediaAndSessionSetMediaClient) Recv() (*MediaID, error) {
-	m := new(MediaID)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
+	return out, nil
 }
 
 // MediaAndSessionServer is the server API for MediaAndSession service.
 // All implementations must embed UnimplementedMediaAndSessionServer
 // for forward compatibility
 type MediaAndSessionServer interface {
-	GetSession(MediaAndSession_GetSessionServer) error
-	SetSession(MediaAndSession_SetSessionServer) error
-	GetMedia(MediaAndSession_GetMediaServer) error
-	SetMedia(MediaAndSession_SetMediaServer) error
+	GetSession(context.Context, *SessionID) (*Session, error)
+	SetSession(context.Context, *Session) (*SessionID, error)
+	GetMedia(context.Context, *MediaID) (*Media, error)
+	SetMedia(context.Context, *Media) (*MediaID, error)
 	mustEmbedUnimplementedMediaAndSessionServer()
 }
 
@@ -175,17 +87,17 @@ type MediaAndSessionServer interface {
 type UnimplementedMediaAndSessionServer struct {
 }
 
-func (UnimplementedMediaAndSessionServer) GetSession(MediaAndSession_GetSessionServer) error {
-	return status.Errorf(codes.Unimplemented, "method GetSession not implemented")
+func (UnimplementedMediaAndSessionServer) GetSession(context.Context, *SessionID) (*Session, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSession not implemented")
 }
-func (UnimplementedMediaAndSessionServer) SetSession(MediaAndSession_SetSessionServer) error {
-	return status.Errorf(codes.Unimplemented, "method SetSession not implemented")
+func (UnimplementedMediaAndSessionServer) SetSession(context.Context, *Session) (*SessionID, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetSession not implemented")
 }
-func (UnimplementedMediaAndSessionServer) GetMedia(MediaAndSession_GetMediaServer) error {
-	return status.Errorf(codes.Unimplemented, "method GetMedia not implemented")
+func (UnimplementedMediaAndSessionServer) GetMedia(context.Context, *MediaID) (*Media, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMedia not implemented")
 }
-func (UnimplementedMediaAndSessionServer) SetMedia(MediaAndSession_SetMediaServer) error {
-	return status.Errorf(codes.Unimplemented, "method SetMedia not implemented")
+func (UnimplementedMediaAndSessionServer) SetMedia(context.Context, *Media) (*MediaID, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetMedia not implemented")
 }
 func (UnimplementedMediaAndSessionServer) mustEmbedUnimplementedMediaAndSessionServer() {}
 
@@ -200,108 +112,76 @@ func RegisterMediaAndSessionServer(s grpc.ServiceRegistrar, srv MediaAndSessionS
 	s.RegisterService(&MediaAndSession_ServiceDesc, srv)
 }
 
-func _MediaAndSession_GetSession_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(MediaAndSessionServer).GetSession(&mediaAndSessionGetSessionServer{stream})
-}
-
-type MediaAndSession_GetSessionServer interface {
-	Send(*Session) error
-	Recv() (*SessionID, error)
-	grpc.ServerStream
-}
-
-type mediaAndSessionGetSessionServer struct {
-	grpc.ServerStream
-}
-
-func (x *mediaAndSessionGetSessionServer) Send(m *Session) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func (x *mediaAndSessionGetSessionServer) Recv() (*SessionID, error) {
-	m := new(SessionID)
-	if err := x.ServerStream.RecvMsg(m); err != nil {
+func _MediaAndSession_GetSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SessionID)
+	if err := dec(in); err != nil {
 		return nil, err
 	}
-	return m, nil
+	if interceptor == nil {
+		return srv.(MediaAndSessionServer).GetSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/dbapis.MediaAndSession/GetSession",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MediaAndSessionServer).GetSession(ctx, req.(*SessionID))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _MediaAndSession_SetSession_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(MediaAndSessionServer).SetSession(&mediaAndSessionSetSessionServer{stream})
-}
-
-type MediaAndSession_SetSessionServer interface {
-	Send(*SessionID) error
-	Recv() (*Session, error)
-	grpc.ServerStream
-}
-
-type mediaAndSessionSetSessionServer struct {
-	grpc.ServerStream
-}
-
-func (x *mediaAndSessionSetSessionServer) Send(m *SessionID) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func (x *mediaAndSessionSetSessionServer) Recv() (*Session, error) {
-	m := new(Session)
-	if err := x.ServerStream.RecvMsg(m); err != nil {
+func _MediaAndSession_SetSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Session)
+	if err := dec(in); err != nil {
 		return nil, err
 	}
-	return m, nil
+	if interceptor == nil {
+		return srv.(MediaAndSessionServer).SetSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/dbapis.MediaAndSession/SetSession",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MediaAndSessionServer).SetSession(ctx, req.(*Session))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _MediaAndSession_GetMedia_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(MediaAndSessionServer).GetMedia(&mediaAndSessionGetMediaServer{stream})
-}
-
-type MediaAndSession_GetMediaServer interface {
-	Send(*Media) error
-	Recv() (*MediaID, error)
-	grpc.ServerStream
-}
-
-type mediaAndSessionGetMediaServer struct {
-	grpc.ServerStream
-}
-
-func (x *mediaAndSessionGetMediaServer) Send(m *Media) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func (x *mediaAndSessionGetMediaServer) Recv() (*MediaID, error) {
-	m := new(MediaID)
-	if err := x.ServerStream.RecvMsg(m); err != nil {
+func _MediaAndSession_GetMedia_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MediaID)
+	if err := dec(in); err != nil {
 		return nil, err
 	}
-	return m, nil
+	if interceptor == nil {
+		return srv.(MediaAndSessionServer).GetMedia(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/dbapis.MediaAndSession/GetMedia",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MediaAndSessionServer).GetMedia(ctx, req.(*MediaID))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _MediaAndSession_SetMedia_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(MediaAndSessionServer).SetMedia(&mediaAndSessionSetMediaServer{stream})
-}
-
-type MediaAndSession_SetMediaServer interface {
-	Send(*MediaID) error
-	Recv() (*Media, error)
-	grpc.ServerStream
-}
-
-type mediaAndSessionSetMediaServer struct {
-	grpc.ServerStream
-}
-
-func (x *mediaAndSessionSetMediaServer) Send(m *MediaID) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func (x *mediaAndSessionSetMediaServer) Recv() (*Media, error) {
-	m := new(Media)
-	if err := x.ServerStream.RecvMsg(m); err != nil {
+func _MediaAndSession_SetMedia_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Media)
+	if err := dec(in); err != nil {
 		return nil, err
 	}
-	return m, nil
+	if interceptor == nil {
+		return srv.(MediaAndSessionServer).SetMedia(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/dbapis.MediaAndSession/SetMedia",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MediaAndSessionServer).SetMedia(ctx, req.(*Media))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 // MediaAndSession_ServiceDesc is the grpc.ServiceDesc for MediaAndSession service.
@@ -310,32 +190,24 @@ func (x *mediaAndSessionSetMediaServer) Recv() (*Media, error) {
 var MediaAndSession_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "dbapis.MediaAndSession",
 	HandlerType: (*MediaAndSessionServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams: []grpc.StreamDesc{
+	Methods: []grpc.MethodDesc{
 		{
-			StreamName:    "GetSession",
-			Handler:       _MediaAndSession_GetSession_Handler,
-			ServerStreams: true,
-			ClientStreams: true,
+			MethodName: "GetSession",
+			Handler:    _MediaAndSession_GetSession_Handler,
 		},
 		{
-			StreamName:    "SetSession",
-			Handler:       _MediaAndSession_SetSession_Handler,
-			ServerStreams: true,
-			ClientStreams: true,
+			MethodName: "SetSession",
+			Handler:    _MediaAndSession_SetSession_Handler,
 		},
 		{
-			StreamName:    "GetMedia",
-			Handler:       _MediaAndSession_GetMedia_Handler,
-			ServerStreams: true,
-			ClientStreams: true,
+			MethodName: "GetMedia",
+			Handler:    _MediaAndSession_GetMedia_Handler,
 		},
 		{
-			StreamName:    "SetMedia",
-			Handler:       _MediaAndSession_SetMedia_Handler,
-			ServerStreams: true,
-			ClientStreams: true,
+			MethodName: "SetMedia",
+			Handler:    _MediaAndSession_SetMedia_Handler,
 		},
 	},
+	Streams:  []grpc.StreamDesc{},
 	Metadata: "dbapi.proto",
 }
