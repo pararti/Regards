@@ -4,8 +4,9 @@ package psqldb
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 
-	"github.com/lib/pq"
+	_ "github.com/lib/pq"
 	pb "github.com/pararti/Regards/api/golang"
 	configo "github.com/pararti/Regards/pkg/config"
 )
@@ -119,7 +120,7 @@ func (d DataBase) CreateTable(booleans ...bool) error {
 }
 
 func NewDataBase(c *configo.PSQLConfig) (*DataBase, error) {
-	psqlconn := "host=" + c.Host + " port=" + c.Port + " user=" + c.User + " password=" + c.Password + " dbname=" + c.DBName + " sslmode=" + c.SSLMode
+	psqlconn := fmt.Spritnf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s", c.Host, c.Port, c.User, c.Password, c.DBName, c.SSLMode)
 	db, err := sql.Open("postgres", psqlconn)
 	if err != nil {
 		return nil, err

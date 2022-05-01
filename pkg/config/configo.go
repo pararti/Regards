@@ -1,6 +1,10 @@
 // configo
 package configo
 
+type ConnConfig struct {
+	Address string `yaml:"address"`
+}
+
 type PSQLConfig struct {
 	Host     string `yaml:"host"`
 	Port     string `yaml:"port"`
