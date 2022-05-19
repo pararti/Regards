@@ -7,7 +7,7 @@ type ConnConfig struct {
 
 type PSQLConfig struct {
 	Host     string `yaml:"host"`
-	Port     string `yaml:"port"`
+	Port     int    `yaml:"port"`
 	User     string `yaml:"user"`
 	Password string `yaml:"password"`
 	DBName   string `yaml:"dbname"`

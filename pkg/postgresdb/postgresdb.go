@@ -63,7 +63,7 @@ func (d DataBase) GetSession(sid *pb.SessionID) (*pb.Session, error) {
 			WHERE id = $1`
 	row := d.DB.QueryRow(query, sid.Id)
 	s := &pb.Session{}
-	err := row.Scan(&s.Id.Id, &s.Meta, &m.L, &m.Type, &m.Name)
+	err := row.Scan(&s.Id.Id, &s.Meta, &s.Users)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
@@ -78,11 +78,14 @@ func (d DataBase) SetSession(s *pb.Session) (*pb.SessionID, error) {
 	query := `INSERT INTO session (meta,users) VALUES($1,$2) RETURNING id`
 	var id *pb.SessionID
 	err := d.DB.QueryRow(query, s.Meta, s.Users).Scan(&id.Id)
+	if err != nil {
+		return nil, err
+	}
 
 	return id, nil
 }
 
-func (d DataBase) CheckTable(names ...string) ([]bool, err) {
+func (d DataBase) CheckTable(names ...string) ([]bool, error) {
 	query := `SELECT EXISTS(SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)`
 	booleans := make([]bool, len(names))
 	stmt, err := d.DB.Prepare(query)
@@ -120,7 +123,7 @@ func (d DataBase) CreateTable(booleans ...bool) error {
 }
 
 func NewDataBase(c *configo.PSQLConfig) (*DataBase, error) {
-	psqlconn := fmt.Spritnf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s", c.Host, c.Port, c.User, c.Password, c.DBName, c.SSLMode)
+	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s", c.Host, c.Port, c.User, c.Password, c.DBName, c.SSLMode)
 	db, err := sql.Open("postgres", psqlconn)
 	if err != nil {
 		return nil, err
@@ -129,16 +132,16 @@ func NewDataBase(c *configo.PSQLConfig) (*DataBase, error) {
 	if err != nil {
 		return nil, err
 	}
-	d := DataBase{DB: db}
+	d := &DataBase{DB: db}
 
-	booleans, err := d.CheckTable(tablenames)
+	booleans, err := d.CheckTable(tablenames...)
 	if err != nil {
 		return nil, err
 	}
-	err = d.CreateTable(booleans)
+	err = d.CreateTable(booleans...)
 	if err != nil {
 		return nil, err
 	}
 
-	return db, nil
+	return d, nil
 }

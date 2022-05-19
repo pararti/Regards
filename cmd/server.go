@@ -9,22 +9,16 @@ import (
 	"path"
 
 	pb "github.com/pararti/Regards/api/golang"
-	"github.com/pararti/Regards/pkg/config"
+	configo "github.com/pararti/Regards/pkg/config"
 	db "github.com/pararti/Regards/pkg/postgresdb"
-	"google.golang.org/grpc"
+	_ "google.golang.org/grpc"
 	"gopkg.in/yaml.v2"
 )
 
 //this var contains config for connect to postgresql database
-var psqlConf = configo.PSQLConfig{Host: "localhost",
-	Port:     5432,
-	User:     "postgres",
-	Password: "",
-	dbname:   "testdb",
-	sslmode:  "disable",
-}
+var psqlConf = configo.PSQLConfig{}
 
-var connConf configo.ConnConf
+var connConf configo.ConnConfig
 
 //this var contains database object like postgresql
 var psqldb *db.DataBase
@@ -51,6 +45,7 @@ func loadConfig(filepath string) error {
 	if err != nil {
 		return err
 	}
+	return nil
 }
 
 type server struct {
@@ -61,7 +56,7 @@ type server struct {
 //get session from database
 //and return response to client
 func (s *server) GetSession(ctx context.Context, id *pb.SessionID) (*pb.Session, error) {
-	session, err := db.GetSession(id)
+	session, err := psqldb.GetSession(id)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +67,7 @@ func (s *server) GetSession(ctx context.Context, id *pb.SessionID) (*pb.Session,
 //add new session to database
 //return new session id to client
 func (s *server) SetSession(ctx context.Context, session *pb.Session) (*pb.SessionID, error) {
-	id, err := db.SetSession(session)
+	id, err := psqldb.SetSession(session)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +78,7 @@ func (s *server) SetSession(ctx context.Context, session *pb.Session) (*pb.Sessi
 //get media object from database
 //return response media object to client
 func (s *server) GetMedia(ctx context.Context, id *pb.MediaID) (*pb.Media, error) {
-	media, err := db.GetMedia(id)
+	media, err := psqldb.GetMedia(id)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +89,7 @@ func (s *server) GetMedia(ctx context.Context, id *pb.MediaID) (*pb.Media, error
 //add new media to database
 //return new media id to client
 func (s *server) SetMedia(ctx context.Context, media *pb.Media) (*pb.MediaID, error) {
-	id, err := db.SetMedia(media)
+	id, err := psqldb.SetMedia(media)
 	if err != nil {
 		return nil, err
 	}

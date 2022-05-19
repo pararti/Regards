@@ -2,10 +2,10 @@
 package main
 
 import (
-	"log"
 	"net"
 
 	pb "github.com/pararti/Regards/api/golang"
+	db "github.com/pararti/Regards/pkg/postgresdb"
 	"google.golang.org/grpc"
 )
 
@@ -14,7 +14,12 @@ func main() {
 	if err != nil {
 		log3.Error.Fatalf("failed to load config: %v", err)
 	}
-	psqldb, err := db.NewDataBase(psqlConf)
+
+	psqldb, err := db.NewDataBase(&psqlConf)
+	if err != nil {
+		log3.Error.Fatalf("failed to create db: %v", err)
+	}
+	err = psqldb.DB.Ping()
 	if err != nil {
 		log3.Error.Fatalf("failed to create db: %v", err)
 	}
